@@ -1,0 +1,11 @@
+output/*
+!output/.gitkeep
+demo-output/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+.pytest_cache/
+.env

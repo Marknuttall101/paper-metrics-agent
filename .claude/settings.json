@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/pubmed.py:*)",
+      "Bash(python tools/validate.py:*)",
+      "Bash(python tools/compare.py:*)",
+      "Bash(python tools/score.py:*)",
+      "Bash(py tools/pubmed.py:*)",
+      "Bash(py tools/validate.py:*)",
+      "Bash(py tools/compare.py:*)",
+      "Bash(py tools/score.py:*)",
+      "Edit(output/**)"
+    ],
+    "deny": [
+      "Edit(.claude/**)",
+      "Edit(CLAUDE.md)",
+      "Edit(tools/**)",
+      "Edit(src/**)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "WebFetch"
+    ]
+  }
+}

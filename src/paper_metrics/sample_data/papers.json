@@ -1,0 +1,82 @@
+[
+  {
+    "pmid": "SAMPLE-001",
+    "year": "2021",
+    "journal": "Journal of Example Cardiology",
+    "title": "Examplozumab and heart failure hospitalisation: a randomised, placebo-controlled trial",
+    "authors": [
+      "Novak L",
+      "Okafor T",
+      "Lindqvist M"
+    ],
+    "abstract": "BACKGROUND: Examplozumab is an investigational antibody for chronic heart failure. METHODS: We randomly assigned 1,204 adults with chronic heart failure to examplozumab or placebo and followed them for a median of 24 months. RESULTS: Hospitalisation for heart failure occurred in 18.2% of the examplozumab group and 23.9% of the placebo group (hazard ratio [HR] 0.74; 95% confidence interval [CI] 0.61 to 0.90; P=0.002). All-cause mortality did not differ significantly between groups (HR 0.93; 95% CI 0.76 to 1.14; P=0.48). CONCLUSIONS: Examplozumab reduced heart failure hospitalisation but not mortality."
+  },
+  {
+    "pmid": "SAMPLE-002",
+    "year": "2022",
+    "journal": "Example Registry Research",
+    "title": "Examplozumab use and 30-day readmission in a national heart failure registry",
+    "authors": [
+      "Okafor T",
+      "Haddad R",
+      "Novak L"
+    ],
+    "abstract": "Aims: To assess real-world readmission after examplozumab. Methods and results: In a registry cohort of 3,416 patients (mean age 71 years), examplozumab use was associated with lower odds of 30-day readmission (adjusted odds ratio 0.81, 95% CI 0.70-0.94, p=0.006). A risk model predicting readmission achieved an AUC of 0.77 (95% CI 0.74-0.80) in the validation set. Conclusion: Findings are consistent with trial results."
+  },
+  {
+    "pmid": "SAMPLE-003",
+    "year": "2023",
+    "journal": "Example Rehabilitation Letters",
+    "title": "Effect of examplozumab on exercise capacity: a pilot trial",
+    "authors": [
+      "Lindqvist M",
+      "Novak L"
+    ],
+    "abstract": "Sixty-two participants with stable heart failure were randomised to examplozumab or usual care for 12 weeks. The change in 6-minute walk distance favoured examplozumab (mean difference 18.5 m, 90% CI 4.2 to 32.8). Quality-of-life scores did not change. Larger trials are needed."
+  },
+  {
+    "pmid": "SAMPLE-004",
+    "year": "2024",
+    "journal": "Example Journal of Medicine",
+    "title": "Long-term outcomes with examplozumab: extended follow-up of a multicentre cohort",
+    "authors": [
+      "Novak L",
+      "Ferreira A",
+      "Okafor T"
+    ],
+    "abstract": "Background We followed 2 870 patients for up to 5 years. Findings Cardiovascular death occurred in 312 patients. Examplozumab was not associated with cardiovascular death (hazard ratio 1·02, 95% CI 0·88–1·18; p=0·79). Interpretation Benefits on hospitalisation did not translate into lower cardiovascular mortality."
+  },
+  {
+    "pmid": "SAMPLE-005",
+    "year": "2025",
+    "journal": "Example Diagnostics",
+    "title": "An NT-proBNP threshold to select patients for examplozumab",
+    "authors": [
+      "Haddad R",
+      "Novak L"
+    ],
+    "abstract": "Objective: To evaluate an NT-proBNP threshold of 900 pg/mL for selecting treatment candidates. Methods: We studied 512 patients referred to two clinics. Results: The threshold had a sensitivity of 88% (95% CI 83 to 92) and a specificity of 71% (95% CI 66 to 76) against the expert panel decision. Conclusion: The threshold may support triage."
+  },
+  {
+    "pmid": "SAMPLE-006",
+    "year": "2023",
+    "journal": "Example Journal of Astrophysics",
+    "title": "Dust attenuation and star formation in high-redshift galaxies",
+    "authors": [
+      "Novak L",
+      "Brandt K",
+      "Ishikawa Y"
+    ],
+    "abstract": "We measured dust attenuation in 184 galaxies at redshift 2 to 3 using deep infrared imaging. Attenuation was correlated with stellar mass (r = 0.62, 95% CI 0.48 to 0.73). Star-forming galaxies above 10^10 solar masses showed systematically higher attenuation. These results constrain models of early galaxy evolution."
+  },
+  {
+    "pmid": "SAMPLE-007",
+    "year": "2024",
+    "journal": "Journal of Example Cardiology",
+    "title": "Examplozumab: promise and open questions (editorial)",
+    "authors": [
+      "Okafor T"
+    ],
+    "abstract": "Examplozumab has attracted attention after several studies in heart failure. In this editorial we discuss the design of the published trials, the limits of registry data and the questions a larger outcome trial should answer, including effects on mortality and quality of life."
+  }
+]
