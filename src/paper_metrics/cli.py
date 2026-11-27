@@ -72,6 +72,9 @@ def _add_run_options(p: argparse.ArgumentParser, default_budget: float = 2.0) ->
     g.add_argument("--max-rounds", type=_positive_int, default=3, help="evaluator rounds before giving up (default 3)")
     g.add_argument("--max-budget-usd", type=_positive_float, default=default_budget,
                    help=f"spending cap for the whole run in US$ (default {default_budget:.2f})")
+    g.add_argument("--no-sdk-budget-cap", dest="sdk_budget_cap", action="store_false",
+                   help="enforce the budget in the pipeline only, without a per-call SDK cap: the agents "
+                        "see no budget line, but a call can overshoot its share (see the README)")
     g.add_argument("--concurrency", type=_positive_int, default=4, help="workers running at once (default 4)")
     m = p.add_argument_group("models (aliases such as sonnet/opus/haiku, or full model IDs)")
     m.add_argument("--orchestrator-model", default="sonnet")
@@ -112,7 +115,7 @@ def _config(args, task: str, gold: list[dict] | None, title: str | None):
     from .agents import RoleSettings, RunConfig
     return RunConfig(
         task=task, out_dir=args.out or _default_out(), max_rounds=args.max_rounds,
-        max_budget_usd=args.max_budget_usd, concurrency=args.concurrency,
+        max_budget_usd=args.max_budget_usd, sdk_budget_cap=args.sdk_budget_cap, concurrency=args.concurrency,
         orchestrator=RoleSettings(args.orchestrator_model, 8),
         worker=RoleSettings(args.worker_model, 10),
         evaluator=RoleSettings(args.evaluator_model, 6),

@@ -89,6 +89,8 @@ what is left when it starts. Workers leave 25% of the total for the review steps
 re-plan leave 10% for the synthesis. The SDK enforces each call's cap, but a call can still go a little
 over it on the turn that is running when the cap is reached, so treat the cap as close but not exact. A call that times out or crashes
 before reporting its cost is charged its whole reservation. Each call also has a timeout (`call_timeout_s`, default 10 minutes).
+With `sdk_budget_cap=False` (`--no-sdk-budget-cap`) the reservation is not passed to the SDK. The
+accounting stays the same, but calls are bounded only by their turn limit and timeout.
 
 `paper-metrics` exits with code 0 when the run is approved and 3 when it finishes without approval,
 which makes it easy to use in scripts and CI.

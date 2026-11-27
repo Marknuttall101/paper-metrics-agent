@@ -125,6 +125,7 @@ Results go to `output/run-<timestamp>/`. Open `comparison.md` first.
 |---|---|---|
 | `--max-rounds` | 3 | Evaluator rounds before stopping without approval |
 | `--max-budget-usd` | 2.00 (`demo`: 0.50) | Spending cap for the whole run (see Security and cost) |
+| `--no-sdk-budget-cap` | off (SDK cap on) | Enforce the budget in the pipeline only (see below) |
 | `--concurrency` | 4 | Workers running at once |
 | `--orchestrator-model` / `--worker-model` / `--evaluator-model` | `sonnet` / `haiku` / `sonnet` | Model per role: an alias (`haiku`, `sonnet`, `opus`) or a full model ID |
 | `--gold` | - | Answer key to score the run against (precision, recall, field accuracy) |
@@ -133,6 +134,17 @@ Results go to `output/run-<timestamp>/`. Open `comparison.md` first.
 | `--quiet` | off | Print only the final summary |
 
 The exit code is 0 when the evaluator approved the run and 3 when the run finished without approval.
+
+### Keeping the budget out of the agents' context
+
+By default each agent call's share of the budget goes to the Claude Agent SDK as `max_budget_usd`. The SDK
+then stops the call at that cap, but its CLI also adds a line to the agent's conversation saying how much
+budget is left. That line is not part of this project's prompts, and it can change how a model behaves.
+`--no-sdk-budget-cap` (or `RunConfig(sdk_budget_cap=False)`, also available in `examples/fault_injection.py`)
+leaves the cap out. The pipeline still reserves a share before every call, adds up what each call cost and
+stops when `--max-budget-usd` is used up. The difference is that no call is stopped partway on cost, only by
+its turn limit and timeout, so a run can go over the cap by what its last calls spend. `run_report.json`
+records which mode was used (`limits.sdk_budget_cap`).
 
 ## What a run writes
 

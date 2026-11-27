@@ -38,6 +38,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", type=Path, default=Path("output/fault-check"))
     ap.add_argument("--max-budget-usd", type=float, default=1.0)
+    ap.add_argument("--no-sdk-budget-cap", dest="sdk_budget_cap", action="store_false",
+                    help="track the budget in the pipeline only (see the README)")
     ap.add_argument("--allow-other-auth", action="store_true")
     args = ap.parse_args()
     check_api_key(args.allow_other_auth)
@@ -45,7 +47,8 @@ def main() -> int:
     gold = json.loads(sample_file("gold.json").read_text(encoding="utf-8"))
     cfg = RunConfig(task="Extract every reported effect estimate from the sample papers on examplozumab "
                          "(by L Novak and colleagues) and compare them.",
-                    out_dir=args.out, max_budget_usd=args.max_budget_usd, gold=gold, title="Fault-injection check")
+                    out_dir=args.out, max_budget_usd=args.max_budget_usd, sdk_budget_cap=args.sdk_budget_cap,
+                    gold=gold, title="Fault-injection check")
     out = asyncio.run(Pipeline(FaultInjecting(gold), cfg).run(papers))
     verdicts = json.loads((args.out / "evaluation.json").read_text(encoding="utf-8"))
     flagged = verdicts[0]["papers"].get("SAMPLE-002", {}) if verdicts else {}

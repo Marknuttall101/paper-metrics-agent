@@ -13,7 +13,10 @@
 Budget: before every agent call the pipeline reserves that call's maximum spend out of what is
 left, and passes it to the SDK as the call's own cap. Reservations are released when the call
 ends and replaced by what it actually cost. Workers leave a share of the budget for the
-evaluator, re-plan and synthesis steps.
+evaluator, re-plan and synthesis steps. With ``sdk_budget_cap=False`` the reservation is not passed
+to the SDK (so the CLI adds no budget line to the agents' context and enforces no per-call cap).
+Reservations and accounting work the same, but a call is stopped only by its turn limit and
+timeout, so a run can overshoot ``max_budget_usd`` by what its last calls spend.
 """
 
 from __future__ import annotations
@@ -49,6 +52,7 @@ class RunConfig:
     out_dir: Path
     max_rounds: int = 3
     max_budget_usd: float = 2.0
+    sdk_budget_cap: bool = True      # also pass each call's reservation to the backend as its own cap
     concurrency: int = 4
     call_timeout_s: float = 600.0
     orchestrator: RoleSettings = field(default_factory=lambda: RoleSettings("sonnet", 8))
@@ -129,7 +133,7 @@ class Pipeline:
         return amount
 
     async def _call(self, call: AgentCall, budget: float) -> AgentResult:
-        call = dataclasses.replace(call, max_budget_usd=budget)
+        call = dataclasses.replace(call, max_budget_usd=budget if self.cfg.sdk_budget_cap else None)
         try:
             result = await asyncio.wait_for(self.backend.run(call), timeout=self.cfg.call_timeout_s)
         except asyncio.TimeoutError:
@@ -168,7 +172,8 @@ class Pipeline:
         cfg.out_dir.mkdir(parents=True, exist_ok=True)
         by_pmid = {p["pmid"]: p for p in papers}
         self.log(f"Task: {cfg.task} | {len(papers)} candidate papers | backend {self.backend.name} "
-                 f"| max {cfg.max_rounds} rounds, US${cfg.max_budget_usd:.2f}")
+                 f"| max {cfg.max_rounds} rounds, US${cfg.max_budget_usd:.2f}"
+                 f"{'' if cfg.sdk_budget_cap else ' (pipeline only, no SDK cap)'}")
 
         records: dict[str, list[dict]] = {}
         notes: dict[str, str] = {}
@@ -334,7 +339,7 @@ class Pipeline:
             "status": status,
             "approved": stop_reason == "approved",
             "limits": {"max_rounds": self.cfg.max_rounds, "max_budget_usd": self.cfg.max_budget_usd,
-                       "concurrency": self.cfg.concurrency},
+                       "sdk_budget_cap": self.cfg.sdk_budget_cap, "concurrency": self.cfg.concurrency},
             "models": {"orchestrator": self.cfg.orchestrator.model, "worker": self.cfg.worker.model,
                        "evaluator": self.cfg.evaluator.model},
             "papers": {"candidates": len(papers), "excluded": excluded, "dropped": dropped,

@@ -29,6 +29,21 @@ def test_sdk_options_give_agents_only_our_tools_and_no_local_settings(tmp_path):
     assert opts.system_prompt == "system"
 
 
+def test_no_call_cap_means_no_budget_flag_for_the_cli(tmp_path):
+    import dataclasses
+    call = dataclasses.replace(_call(), max_budget_usd=None)
+    assert ClaudeSDKBackend(cwd=str(tmp_path)).build_options(call).max_budget_usd is None
+
+
+@pytest.mark.parametrize("argv, expected", [([], True), (["--no-sdk-budget-cap"], False)])
+def test_cli_sdk_budget_cap_option(argv, expected, tmp_path):
+    from paper_metrics.cli import _config, build_parser
+    for command in ("run", "demo"):
+        extra = ["--papers", "p.json"] if command == "run" else []
+        args = build_parser().parse_args([command, *extra, *argv, "--out", str(tmp_path)])
+        assert _config(args, "t", None, None).sdk_budget_cap is expected
+
+
 def test_tool_errors_are_returned_to_the_agent_not_raised():
     async def boom(args):
         raise ValueError("'records' must be a list")

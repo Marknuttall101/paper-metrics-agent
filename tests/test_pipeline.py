@@ -85,6 +85,42 @@ def test_budget_is_a_hard_cap(tmp_path):
     assert report["rounds"], "the round that ran must be in the report"
 
 
+class RecordsCaps(ScriptedBackend):
+    """Records the per-call cap each call is given, and charges a fixed cost per call."""
+
+    def __init__(self, gold, cost):
+        super().__init__(gold)
+        self.caps, self.cost = [], cost
+
+    async def run(self, call):
+        self.caps.append(call.max_budget_usd)
+        result = await super().run(call)
+        result.cost_usd = self.cost
+        return result
+
+
+def test_sdk_budget_cap_is_passed_by_default(tmp_path):
+    backend = RecordsCaps(GOLD, cost=0.001)
+    run_pipeline(backend, tmp_path)
+    assert backend.caps and all(c is not None and c > 0 for c in backend.caps)
+
+
+def test_without_the_sdk_cap_no_call_gets_a_cap_but_the_pipeline_still_tracks_spend(tmp_path):
+    backend = RecordsCaps(GOLD, cost=0.001)
+    out = run_pipeline(backend, tmp_path, sdk_budget_cap=False)
+    assert out.approved and backend.caps and all(c is None for c in backend.caps)
+    assert abs(out.cost_usd - 0.001 * len(backend.caps)) < 1e-9
+    report = json.loads((tmp_path / "out" / "run_report.json").read_text(encoding="utf-8"))
+    assert report["limits"]["sdk_budget_cap"] is False
+
+
+def test_without_the_sdk_cap_the_pipeline_still_stops_when_the_budget_is_spent(tmp_path):
+    backend = RecordsCaps(GOLD, cost=0.3)          # every call costs far more than its share
+    out = run_pipeline(backend, tmp_path, max_budget_usd=1.0, sdk_budget_cap=False)
+    assert out.stop_reason == "budget" and not out.approved
+    assert all(c is None for c in backend.caps)
+
+
 class FailsRedo(NeverApproves):
     """Round 1 succeeds; the SAMPLE-002 redo in round 2 never submits."""
 
